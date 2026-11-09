@@ -131,7 +131,7 @@ section.hero{border-top:0;padding-block:40px 48px}
   <section class="hero">
     <div class="stack">
       <h1>Videos that bring sellers to Mapro.</h1>
-      <p class="measure">A good reel stops people scrolling, and they remember it. A really well-made one tells a seller something about you as well: that you'll put real effort into selling their house, and that you can see what's special about it. The two below were cut from your YouTube films.</p>
+      <p class="measure">A good reel stops people scrolling, and they remember it. A really well-made one tells a seller something about you as well: that you'll put real effort into selling their house, and that you can see what's special about it.</p>
       <p class="measure muted small">Tap a reel to play it, with sound.</p>
     </div>
     <div class="phones">
@@ -233,30 +233,43 @@ section.hero{border-top:0;padding-block:40px 48px}
 
 <script>
 document.querySelectorAll('.screen').forEach(s=>{
-  const vids=[...s.querySelectorAll('video')]; let cur=0, muted=false, started=false;
+  const vids=[...s.querySelectorAll('video')]; let cur=0, muted=false, prepared=false;
   const bM=s.querySelector('.mute'), bF=s.querySelector('.full'), bar=s.querySelector('.bar i');
   const v=()=>vids[cur];
-  vids.forEach(x=>{ x.loop=false; x.addEventListener('ended',swap); x.addEventListener('timeupdate',()=>{ if(x===v()&&x.duration) bar.style.width=(x.currentTime/x.duration*100)+'%'; });
-    x.addEventListener('waiting',()=>{ if(x===v()&&s.classList.contains('playing')) s.classList.add('buffering'); }); x.addEventListener('playing',()=>s.classList.remove('buffering')); x.addEventListener('pause',()=>s.classList.remove('buffering')); x.addEventListener('error',()=>s.classList.remove('buffering')); });
-  // the second player is parked at frame 0; on 'ended' it starts and the two swap, so the loop has no decode gap
-  // iPhone Safari can only fullscreen the <video> itself, so the hidden second player would never be seen there:
-  // inside that native fullscreen the one visible video loops on its own instead of swapping.
-  vids.forEach(x=>{ x.addEventListener('webkitbeginfullscreen',()=>{ x.loop=true; });
-    x.addEventListener('webkitendfullscreen',()=>{ x.loop=false; if(x.paused){ s.classList.remove('playing'); s.setAttribute('aria-label','Play'); } });
-    x.addEventListener('play',()=>{ if(x===v()){ s.classList.add('playing'); s.setAttribute('aria-label','Pause'); } });
-    x.addEventListener('pause',()=>{ if(x===v()&&!x.ended){ s.classList.remove('playing'); s.setAttribute('aria-label','Play'); } }); });
-  function swap(){ const a=vids[cur], b=vids[1-cur]; if(a.webkitDisplayingFullscreen){ a.currentTime=0; a.play().catch(()=>{}); return; } b.currentTime=0; b.muted=muted; const p=b.play(); if(p&&p.catch) p.catch(()=>{}); b.classList.remove('back'); b.classList.add('front'); a.classList.remove('front'); a.classList.add('back'); a.pause(); a.currentTime=0; cur=1-cur; }
+  // the play button and the spinner follow the video itself, so they can never disagree with it
+  const ui=on=>{ s.classList.toggle('playing',on); s.setAttribute('aria-label',on?'Pause':'Play'); if(!on) s.classList.remove('buffering'); };
+  vids.forEach(x=>{ x.loop=false;
+    x.addEventListener('ended',()=>{ if(x===v()) swap(); });
+    x.addEventListener('timeupdate',()=>{ if(x===v()&&x.duration) bar.style.width=(x.currentTime/x.duration*100)+'%'; });
+    x.addEventListener('waiting',()=>{ if(x===v()&&!x.paused) s.classList.add('buffering'); });
+    x.addEventListener('playing',()=>{ if(x===v()){ s.classList.remove('buffering'); ui(true); } });
+    x.addEventListener('play',()=>{ if(x===v()) ui(true); });
+    x.addEventListener('pause',()=>{ if(x===v()&&!x.ended) ui(false); });
+    x.addEventListener('error',()=>{ if(x===v()) ui(false); });
+    // iPhone Safari can only fullscreen the <video> itself, so the hidden second player would never be seen there:
+    // inside that native fullscreen the one visible video loops on its own instead of swapping.
+    x.addEventListener('webkitbeginfullscreen',()=>{ x.loop=true; });
+    x.addEventListener('webkitendfullscreen',()=>{ x.loop=false; ui(!x.paused); });
+  });
+  // the second player is parked at frame 0; on 'ended' it starts and the two swap, so the loop has no decode gap.
+  // cur changes before the old one is paused, so its pause event is ignored.
+  function swap(){ const a=vids[cur], b=vids[1-cur];
+    if(a.webkitDisplayingFullscreen){ a.currentTime=0; a.play().catch(()=>{}); return; }
+    b.currentTime=0; b.muted=muted; const p=b.play(); if(p&&p.catch) p.catch(()=>{});
+    b.classList.remove('back'); b.classList.add('front'); a.classList.remove('front'); a.classList.add('back');
+    cur=1-cur; a.pause(); a.currentTime=0; }
   function setMute(m){ muted=m; vids.forEach(x=>x.muted=muted); s.classList.toggle('muted',muted); bM.setAttribute('aria-label',muted?'Unmute':'Mute'); }
   function play(){
-    if(!started){ started=true; vids[1].preload='auto'; vids[1].load(); vids[1].currentTime=0; }
+    const x=v(); x.muted=muted;
+    const p=x.play();                                   // first thing in the tap, so the gesture goes to this video
+    ui(true); if(x.readyState<3) s.classList.add('buffering');
+    if(p&&p.catch) p.catch(()=>{ ui(false); });         // if the browser refuses, show the play button again
     document.querySelectorAll('.screen').forEach(o=>{ if(o!==s) o.dispatchEvent(new Event('halt')); });
-    const x=v(); x.muted=muted; if(x.readyState<3) s.classList.add('buffering'); const p=x.play();
-    if(p&&p.catch) p.catch(()=>{ setMute(true); x.play().catch(()=>{}); });
-    s.classList.add('playing'); s.setAttribute('aria-label','Pause');
+    if(!prepared){ prepared=true; const b=vids[1]; b.preload='auto'; try{ b.load(); }catch(e){} }   // still inside the tap, so iPhones allow it to play later
   }
-  function pause(){ v().pause(); s.classList.remove('playing'); s.setAttribute('aria-label','Play'); }
-  const toggle=()=>{ s.classList.contains('playing')?pause():play(); };
-  s.addEventListener('halt',()=>{ if(s.classList.contains('playing')) pause(); });
+  function pause(){ v().pause(); ui(false); }
+  const toggle=()=>{ v().paused?play():pause(); };
+  s.addEventListener('halt',()=>{ if(!v().paused) pause(); });
   s.addEventListener('click',e=>{ if(e.target.closest('button')) return; toggle(); });
   s.addEventListener('keydown',e=>{ if(e.target!==s) return; if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); } });
   bM.addEventListener('click',e=>{ e.stopPropagation(); setMute(!muted); });
