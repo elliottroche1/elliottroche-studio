@@ -64,20 +64,49 @@ section.hero{border-top:0;padding-block:40px 48px}
 .cap{display:grid;gap:4px;text-align:center}
 .cap b{font-family:var(--display);font-weight:500;font-size:19px}
 .cap span{font-size:14px;color:var(--muted)}
-/* storyboards */
-.boards{margin-top:28px;display:grid;gap:28px}
-.board{display:grid;gap:10px}
-.board .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:6px;border:1px solid var(--line);scrollbar-width:thin}
-.board a{display:block}
-.board a:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-.board img{width:100%;height:auto;display:block}
-.board > span{font-size:14px;color:var(--muted)}
-.hint-phone{display:none}
-/* on a phone the board keeps a readable height and scrolls sideways */
+/* storyboards: real text and 9:16 frames. The side column stays put; the frames scroll sideways.
+   The board is a cream document and keeps its own colours in both themes, like a printed sheet. */
+.boards{margin-top:28px;display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+.sb{min-width:0;max-width:100%;--sb-bg:#f6f2eb;--sb-fg:#1c1814;--sb-muted:#6b6257;--sb-red:#b9123a;border:1px solid var(--line);border-radius:6px;background:var(--sb-bg);color:var(--sb-fg)}
+.sb-inner{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;padding:18px 0 18px 20px}
+.sb-side{min-width:0;display:grid;gap:6px;align-content:start;font-family:var(--body)}
+.sb-kicker{font:600 9.5px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--sb-muted)}
+.sb-title{font-size:27px;line-height:1.05;margin:2px 0 6px;color:var(--sb-fg);text-wrap:balance}
+.sb-side dl{margin:0;display:grid;gap:2px}
+.sb-side dt{font:600 10px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--sb-red);margin-top:6px}
+.sb-side dd{margin:0;font-size:12.5px;line-height:1.4}
+.sb-stripwrap{position:relative;min-width:0}
+.sb-strip{display:flex;gap:14px;align-items:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding:0 20px 6px 0;scroll-padding-left:0}
+.sb-strip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sb-shot{width:168px;flex:none;display:grid;gap:5px;align-content:start}
+.sb-frame{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:3px;background:#222}
+.sb-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.sb-frame .cap{position:absolute;left:10px;right:10px;margin:0;color:#fff;font-family:var(--display);font-size:15px;line-height:1.15;text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 14px rgba(0,0,0,.25)}
+.sb-frame .cap.low{top:62%}
+.sb-frame .cap.high{top:16%}
+.sb-frame .cap b{display:block;font-weight:500}
+.sb-frame .cap i{display:block;font-style:italic}
+.sb-frame .cap.end{top:66%}
+.sb-frame .cap.end b{font-size:19px;margin-bottom:2px}
+.sb-frame .cap.end small{display:block;font:600 6.5px/1.6 var(--body);letter-spacing:.08em;text-transform:uppercase}
+.sb-frame .cap.end i{font-size:13px}
+.sb-frame .pill{display:inline-block;margin-top:6px;font:600 6.5px/1 var(--body);letter-spacing:.02em;color:#fff;background:#d81b4a;padding:4px 7px;border-radius:999px;text-shadow:none}
+.sb-tc{font:600 10.5px/1.2 var(--body);color:var(--sb-red);margin-top:4px;font-variant-numeric:tabular-nums}
+.sb-note{font:400 11px/1.35 var(--body);color:var(--sb-fg)}
+/* the nudge: a pill and a soft fade at the right edge of the strip until the reader scrolls it */
+.sb-stripwrap::after{content:"";position:absolute;top:0;bottom:6px;right:0;width:56px;background:linear-gradient(to right,rgba(246,242,235,0),rgba(246,242,235,.92));pointer-events:none;transition:opacity .3s}
+.sb-more{position:absolute;right:14px;top:150px;display:inline-flex;align-items:center;gap:6px;font:600 11px/1 var(--body);letter-spacing:.02em;color:#fff;background:rgba(28,24,20,.82);padding:9px 12px;border-radius:999px;pointer-events:none;animation:nudge 1.6s ease-in-out infinite;transition:opacity .3s}
+.sb-more svg{width:14px;height:14px;fill:#fff}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+.sb.scrolled .sb-stripwrap::after,.sb.scrolled .sb-more{opacity:0}
 @media (max-width:760px){
-  .board a{display:inline-block}
-  .board img{width:auto;max-width:none;height:min(560px,72vh)}
-  .hint-phone{display:block}.hint-desk{display:none}
+  .sb-inner{grid-template-columns:minmax(0,1fr);gap:14px;padding:16px 0 14px 16px}
+  .sb-side{padding-right:16px}
+  .sb-side dd{font-size:13px}
+  .sb-strip{padding-right:16px}
+  .sb-shot{width:150px}
+  .sb-frame .cap{font-size:14px}
+  .sb-more{top:132px}
 }
 /* tiers */
 .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
@@ -101,7 +130,7 @@ section.hero{border-top:0;padding-block:40px 48px}
 
   <section class="hero">
     <div class="stack">
-      <h1>Instagram reels that make people want to sell their house through Mapro.</h1>
+      <h1>Videos that bring sellers to Mapro.</h1>
       <p class="measure">A good reel stops people scrolling, and they remember it. A really well-made one tells a seller something about you as well: that you'll put real effort into selling their house, and that you can see what's special about it. The two below were cut from your YouTube films.</p>
       <p class="measure muted small">Tap a reel to play it, with sound.</p>
     </div>
@@ -148,11 +177,26 @@ section.hero{border-top:0;padding-block:40px 48px}
       <p class="measure">For each new listing, all I need from your side is the details, the photos, and the film if it's ready. I'll come back with storyboards like the ones below, with the one I'd recommend at the top and the others as alternatives. You pick one, change anything you like, and I make it. You can change things along the way too, and if marketing or legal need to sign it off first, that's built in. I'd much rather shape the ideas with you than hand over a video every week and hope you like it.</p>
       <p class="measure">Videos need to remain fresh and creative. Repetitive, low-effort videos tell a seller exactly the wrong thing. A reel has to hold people from the first second. The longer they watch, the more Instagram shows it, and the further it reaches, including sellers who haven't yet decided who to list with, and even potential buyers.</p>
       <p class="measure">Each storyboard starts with who the video is for and the feeling it's going for. Two storyboards below (for O Sonho, which has since come off your site; they are just examples):</p>
-      <p class="measure muted small"><span class="hint-desk">Tap a storyboard to open it full size.</span><span class="hint-phone">Scroll sideways to read a storyboard, or tap it to open full size.</span></p>
     </div>
     <div class="boards">
-      <div class="board"><div class="scroll"><a href="/mapro/media/c1_board.jpg" target="_blank" rel="noopener"><img src="/mapro/media/c1_board.jpg" alt="Storyboard C1, Seven bedrooms: the viewer, the feeling, the hook and eight frames" loading="lazy"></a></div><span>C1 · Seven bedrooms. For the parent who wants a house the grown-up kids keep coming back to. Warmth and a laugh, then the lump in the throat at the table.</span></div>
-      <div class="board"><div class="scroll"><a href="/mapro/media/c2_board.jpg" target="_blank" rel="noopener"><img src="/mapro/media/c2_board.jpg" alt="Storyboard C2, Sunday: the viewer, the feeling, the hook and six frames" loading="lazy"></a></div><span>C2 · Sunday. The exhale, for the person scrolling on a Tuesday night. Built around the woman in your film, so every cut lands on her step or her gesture.</span></div>
+      <div class="sb" id="board-c1">
+        <div class="sb-inner">
+          <div class="sb-side"><span class="sb-kicker">O Sonho · Quinta do Lago · 7 bedrooms</span><h3 class="sb-title">1 · Seven bedrooms</h3><dl><dt>For</dt><dd>The family convener, 55–70: grown-up children, grandchildren, a summer they want everyone to come to.</dd><dt>Feel</dt><dd>Warmth, pride, a laugh. "That's my family." Then the lump in the throat on the table.</dd><dt>Hook</dt><dd>"Seven bedrooms." then, a beat later: "So nobody ever stays in a hotel again."</dd><dt>Rhythm</dt><dd>Conversational. Each room 1.8–2.5 s; the joke rooms get an extra half-beat so the laugh lands. The table is held.</dd></dl></div>
+          <div class="sb-stripwrap">
+            <div class="sb-strip" tabindex="0" aria-label="Frames of storyboard 1 · Seven bedrooms, scrolls sideways"><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-1.jpg" alt="The house through pine branches, a woman on the upper terrace" loading="lazy"><p class="cap low"><b>Seven bedrooms.</b><i>So nobody ever stays in a hotel again.</i></p></div><b class="sb-tc">0:00 · 3 s</b><span class="sb-note">Through the oleanders to the house. Line 2 cuts in at 1.4 s.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-2.jpg" alt="A bed with pink cushions" loading="lazy"><p class="cap low"><i>The grandkids'.</i></p></div><b class="sb-tc">0:03 · 2 s</b><span class="sb-note">Pink cushions, soft light.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-3.jpg" alt="A woman walking towards the lift" loading="lazy"><p class="cap low"><b>Mum's.</b><i>(There's a lift.)</i></p></div><b class="sb-tc">0:05 · 2.5 s</b><span class="sb-note">She walks to the lift. The aside is the laugh.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-4.jpg" alt="A bedroom with a window onto an olive tree" loading="lazy"><p class="cap low"><b>The one with</b><i>the olive tree.</i></p></div><b class="sb-tc">0:07.5 · 2 s</b><span class="sb-note">The bedroom framing the old olive tree.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-5.jpg" alt="The largest suite" loading="lazy"><p class="cap low"><b>Your brother's.</b><i>He'll still complain.</i></p></div><b class="sb-tc">0:09.5 · 2.5 s</b><span class="sb-note">Biggest suite. Extra half-beat for the joke.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-6.jpg" alt="The long dining table" loading="lazy"><p class="cap low"><b>And one table</b><i>for everyone.</i></p></div><b class="sb-tc">0:12 · 3.5 s</b><span class="sb-note">The long dining table. The turn from funny to moving: hold it.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-7.jpg" alt="The house from the air, pines and the sea beyond" loading="lazy"><p class="cap high"><b>O Sonho</b><i>means "the dream".</i></p></div><b class="sb-tc">0:15.5 · 4 s</b><span class="sb-note">Drone: house, pines, the Ria Formosa and the sea beyond.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c1-8.jpg" alt="The house from the pool, end card" loading="lazy"><p class="cap end"><b>O Sonho</b><small>7 bedrooms · on the 7th fairway</small><i>Quinta do Lago</i><span class="pill">Mapro | Knight Frank</span></p></div><b class="sb-tc">0:19.5 · 3.5 s</b><span class="sb-note">End card. Price on request, so it isn't shown.</span></div></div>
+            <span class="sb-more" aria-hidden="true">Scroll <svg viewBox="0 0 24 24"><path d="M5 11h11.2l-4.6-4.6L13 5l7 7-7 7-1.4-1.4 4.6-4.6H5z"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div class="sb" id="board-c2">
+        <div class="sb-inner">
+          <div class="sb-side"><span class="sb-kicker">O Sonho · Quinta do Lago · 7 bedrooms</span><h3 class="sb-title">2 · Sunday</h3><dl><dt>For</dt><dd>Aspirational scrollers (the bulk of the views) and wellness-minded buyers. Women 35–60 are a big share of saves.</dd><dt>Feel</dt><dd>The exhale. Permission to do nothing, beautifully.</dd><dt>Hook</dt><dd>Her fingertips trailing through wildflowers as she walks out, and one word: "Sunday."</dd><dt>Rhythm</dt><dd>Follows her body: every cut on her step or gesture, so it feels like one continuous morning. The longest holds of the set (3.5–4.5 s). Almost no text.</dd></dl></div>
+          <div class="sb-stripwrap">
+            <div class="sb-strip" tabindex="0" aria-label="Frames of storyboard 2 · Sunday, scrolls sideways"><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-1.jpg" alt="A woman walking out, her hand through wildflowers" loading="lazy"><p class="cap low"><i>Sunday.</i></p></div><b class="sb-tc">0:00 · 3.5 s</b><span class="sb-note">Hand through the flowers, walking out of the door. Cut as her foot lands.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-2.jpg" alt="She steps into the pool" loading="lazy"></div><b class="sb-tc">0:03.5 · 4 s</b><span class="sb-note">She steps into the pool. Match the direction of her walk to the shot before.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-3.jpg" alt="Lying on a sun lounger by the pool" loading="lazy"><p class="cap low"><i>Nowhere to be.</i></p></div><b class="sb-tc">0:07.5 · 4 s</b><span class="sb-note">Lying in the sun with a book. The line, then nothing.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-4.jpg" alt="Through the oleanders to golfers on the fairway" loading="lazy"><p class="cap high"><b>Other people are</b><i>playing golf.</i></p></div><b class="sb-tc">0:11.5 · 3.5 s</b><span class="sb-note">From behind her: through the oleanders, golfers on the 7th. The smile line.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-5.jpg" alt="The bath running" loading="lazy"></div><b class="sb-tc">0:15 · 3.5 s</b><span class="sb-note">Evening: the bath running. A sense of time passing without a clock.</span></div><div class="sb-shot"><div class="sb-frame"><img src="/mapro/media/sb/c2-6.jpg" alt="The house from the garden, end card" loading="lazy"><p class="cap end"><b>O Sonho</b><i>Quinta do Lago</i><span class="pill">Mapro | Knight Frank</span></p></div><b class="sb-tc">0:18.5 · 4 s</b><span class="sb-note">Wide from the garden: she's on the balcony, small. End.</span></div></div>
+            <span class="sb-more" aria-hidden="true">Scroll <svg viewBox="0 0 24 24"><path d="M5 11h11.2l-4.6-4.6L13 5l7 7-7 7-1.4-1.4 4.6-4.6H5z"/></svg></span>
+          </div>
+        </div>
+      </div>
     </div>
     <p class="measure" style="margin-top:32px">When a reel needs your agents, I'd like to be at the house with them, working out the idea and filming it together. And I'm happy to work alongside your social media team rather than around them.</p>
   </section>
@@ -213,6 +257,7 @@ document.querySelectorAll('.screen').forEach(s=>{
   function full(){ const x=v(); if(s.requestFullscreen){ s.requestFullscreen().catch(()=>{}); } else if(x.webkitEnterFullscreen){ x.webkitEnterFullscreen(); } }
   bF.addEventListener('click',e=>{ e.stopPropagation(); full(); });
 });
+document.querySelectorAll('.sb-strip').forEach(sc=>{ sc.addEventListener('scroll',()=>sc.closest('.sb').classList.add('scrolled'),{once:true}); });
 </script>
 
 </body>
