@@ -2,14 +2,200 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elliott Roche</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Mapro Reels Proposal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:#141210;color:#ece5da;font:16px/1.6 "IBM Plex Sans",system-ui,-apple-system,sans-serif;padding:16px}
-p{margin:0;text-align:center}
-b{font-family:"EB Garamond",Georgia,serif;font-weight:500;font-size:28px;display:block;margin-bottom:6px}
-a{color:#d9b77a}
+/* Layout: a dark screening room. Two phones side by side at the top, then short copy in a narrow measure, two storyboards as proof of process, three plain price columns, one line to end. */
+:root{
+  --bg:#141210; --bg-2:#1d1a17; --line:#2f2a25; --fg:#ece5da; --muted:#a79d90; --accent:#d9b77a; --accent-ink:#1a1408;
+  --display:"EB Garamond",Georgia,"Times New Roman",serif; --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){ :root:not([data-theme="dark"]){ --bg:#f5f1ea; --bg-2:#ece6dc; --line:#d9d1c4; --fg:#1b1713; --muted:#6b6257; --accent:#8a6a2a; --accent-ink:#fff; color-scheme:light } }
+:root[data-theme="light"]{ --bg:#f5f1ea; --bg-2:#ece6dc; --line:#d9d1c4; --fg:#1b1713; --muted:#6b6257; --accent:#8a6a2a; --accent-ink:#fff; color-scheme:light }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:1040px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:500;letter-spacing:.005em;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,6vw,56px);line-height:1.08}
+h2{font-size:clamp(26px,3.6vw,36px);line-height:1.15}
+h3{font-size:22px;line-height:1.2}
+p{margin:0}
+.measure{max-width:62ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+em{font-family:var(--display);font-style:italic;font-size:1.06em}
+a{color:inherit}
+section{padding-block:56px;border-top:1px solid var(--line)}
+section.hero{border-top:0;padding-block:40px 48px}
+.stack{display:grid;gap:18px}
+.head{display:flex;justify-content:space-between;gap:16px;align-items:baseline;flex-wrap:wrap;padding-block:18px 0;font:500 13px var(--body);color:var(--muted)}
+/* phones: smaller, well separated; one under the other on a phone */
+.phones{display:flex;justify-content:center;gap:56px;flex-wrap:wrap;margin-top:40px}
+.phone{display:grid;gap:12px;width:min(280px,100%);min-width:0}
+@media (max-width:620px){.phones{gap:40px}.phone{width:min(260px,72vw)}}
+/* the player behaves like a reel: a poster and a play button, tap to play or pause, one at a time, sound on, a thin progress line */
+.screen{position:relative;aspect-ratio:9/16;max-width:100%;background:#000;border-radius:22px;overflow:hidden;border:1px solid var(--line);cursor:pointer}
+.screen:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.screen video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.screen video.back{visibility:hidden}
+.screen:fullscreen{border-radius:0;border:0;background:#000}
+.screen:fullscreen video{object-fit:contain}
+.play{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;background:rgba(0,0,0,.12);transition:opacity .18s}
+.play svg{width:64px;height:64px;fill:#fff;filter:drop-shadow(0 2px 12px rgba(0,0,0,.6))}
+.screen.playing .play{opacity:0}
+.ctl{position:absolute;right:10px;bottom:14px;display:flex;gap:8px}
+.ctl button{width:34px;height:34px;padding:0;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+.ctl button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ctl svg{width:17px;height:17px;fill:#fff}
+.mute .off{display:none}
+.screen.muted .mute .on{display:none}
+.screen.muted .mute .off{display:block}
+.bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.18)}
+.bar i{display:block;height:100%;width:0;background:#fff}
+.cap{display:grid;gap:4px;text-align:center}
+.cap b{font-family:var(--display);font-weight:500;font-size:19px}
+.cap span{font-size:14px;color:var(--muted)}
+/* storyboards */
+.boards{margin-top:28px;display:grid;gap:28px}
+.board{display:grid;gap:10px}
+.board img{width:100%;height:auto;display:block;border-radius:6px;border:1px solid var(--line)}
+.board > span{font-size:14px;color:var(--muted)}
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
+@media (max-width:760px){.tiers{grid-template-columns:1fr}}
+.tier{min-width:0;display:grid;gap:14px;align-content:start;padding:22px;border:1px solid var(--line);border-radius:8px;background:var(--bg-2)}
+.tier.pick{border-color:var(--accent)}
+.tier .name{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.tier .tag{font:600 10px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);padding:5px 8px;border-radius:999px}
+.price{font-family:var(--display);font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+.price small{font:400 14px var(--body);color:var(--muted);margin-left:6px}
+.tier ul{margin:0;padding-left:18px;display:grid;gap:7px;font-size:15px}
+.tier .for{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.fine{font-size:13px;color:var(--muted);margin-top:16px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
-<body><p><b>Elliott Roche</b>Video editor &amp; motion designer<br><a href="mailto:elliottroche1@gmail.com">elliottroche1@gmail.com</a></p></body>
+<body>
+
+<div class="wrap">
+  <div class="head"><span>Proposal for Mapro | Knight Frank</span><span>Elliott Roche · November 2026</span></div>
+
+  <section class="hero">
+    <div class="stack">
+      <h1>Instagram reels that make people want to sell their house through Mapro.</h1>
+      <p class="measure">A good reel stops people scrolling, and they remember it. A really well-made one tells a seller something about you as well: that you'll put real effort into selling their house, and that you can see what's special about it. The two below were cut from your YouTube films.</p>
+      <p class="measure muted small">Tap a reel to play it, with sound.</p>
+    </div>
+    <div class="phones">
+      <div class="phone">
+        <div class="screen" tabindex="0" role="button" aria-label="Play">
+          <video class="front" src="/mapro/media/a1.mp4" poster="/mapro/media/a1_poster.jpg" playsinline preload="metadata"></video>
+          <video class="back" src="/mapro/media/a1.mp4" playsinline preload="none" muted></video>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
+          <div class="ctl">
+            <button class="mute" type="button" aria-label="Mute"><svg class="on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06A9 9 0 0 0 14 3.23z"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.6 3 2.9-2.9-1.4-1.4-2.9 2.9-2.9-2.9-1.4 1.4 2.9 2.9-2.9 2.9 1.4 1.4 2.9-2.9 2.9 2.9 1.4-1.4-2.9-2.9z"/></svg></button>
+            <button class="full" type="button" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"/></svg></button>
+          </div>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="cap"><b>Someone looked after this house</b><span>Restored home in the hills near Loulé · 21 s</span></div>
+      </div>
+      <div class="phone">
+        <div class="screen" tabindex="0" role="button" aria-label="Play">
+          <video class="front" src="/mapro/media/staircase.mp4" poster="/mapro/media/staircase_poster.jpg" playsinline preload="metadata"></video>
+          <video class="back" src="/mapro/media/staircase.mp4" playsinline preload="none" muted></video>
+          <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l11-6.5a1 1 0 0 0 0-1.74l-11-6.5A1 1 0 0 0 8 5.5z"/></svg></span>
+          <div class="ctl">
+            <button class="mute" type="button" aria-label="Mute"><svg class="on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4.03v8.05A4.5 4.5 0 0 0 16.5 12zM14 3.23v2.06a7 7 0 0 1 0 13.42v2.06A9 9 0 0 0 14 3.23z"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M3 9v6h4l5 4V5L7 9H3zm13.6 3 2.9-2.9-1.4-1.4-2.9 2.9-2.9-2.9-1.4 1.4 2.9 2.9-2.9 2.9 1.4 1.4 2.9-2.9 2.9 2.9 1.4-1.4-2.9-2.9z"/></svg></button>
+            <button class="full" type="button" aria-label="Full screen"><svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4V4zm10 0h6v6h-2V6h-4V4zM4 14h2v4h4v2H4v-6zm14 0h2v6h-6v-2h4v-4z"/></svg></button>
+          </div>
+          <div class="bar"><i></i></div>
+        </div>
+        <div class="cap"><b>The Staircase</b><span>Villa, Quinta das Salinas · 20 s</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="stack">
+      <h2>A starting point</h2>
+      <p class="measure">You're already paying a film crew for every listing, and the footage could be doing a lot more than one YouTube video. It could be bringing you buyers and sellers. The two reels above are simple edits from the YouTube uploads. They can be refined around what Mapro wants to say and the image you want the brand to have, and with the source files, and the chance to film with your agents, we could take them to the next level. These two are short, but longer pieces matter too.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="stack">
+      <h2>How we'd work</h2>
+      <p class="measure">For each new listing, all I need from your side is the details, the photos, and the film if it's ready. I'll come back with storyboards like the ones below, with the one I'd recommend at the top and the others as alternatives. We go back and forth until there's one you want to make, then I make it. You can change things along the way, and if marketing or legal need to sign it off first, that's built in. I'd much rather shape the ideas with you than hand over a video every week and hope you like it.</p>
+      <p class="measure">Videos need to remain fresh and creative. Repetitive, low-effort videos tell a seller exactly the wrong thing. A reel has to hold people from the first second. The longer they watch, the more Instagram shows it, and the further it reaches, including sellers who haven't yet decided who to list with, and even potential buyers.</p>
+      <p class="measure">Each storyboard starts with who the video is for and the feeling it's going for. Two storyboards below (for O Sonho, which has since come off your site; they are just examples):</p>
+    </div>
+    <div class="boards">
+      <div class="board"><img src="/mapro/media/c1_board.jpg" alt="Storyboard C1, Seven bedrooms: the viewer, the feeling, the hook and eight frames" loading="lazy"><span>C1 · Seven bedrooms. For the parent who wants a house the grown-up kids keep coming back to. Warmth and a laugh, then the lump in the throat at the table.</span></div>
+      <div class="board"><img src="/mapro/media/c2_board.jpg" alt="Storyboard C2, Sunday: the viewer, the feeling, the hook and six frames" loading="lazy"><span>C2 · Sunday. The exhale, for the person scrolling on a Tuesday night. Built around the woman in your film, so every cut lands on her step or her gesture.</span></div>
+    </div>
+    <p class="measure" style="margin-top:32px">When a reel needs your agents, I'd like to be at the house with them, working out the idea and filming it together. And I'm happy to work alongside your social media team rather than around them.</p>
+  </section>
+
+  <section>
+    <div class="stack">
+      <h2>Prices</h2>
+      <p class="measure">To start, I'd suggest a retainer of €2,000 a month: one reel a week, each one with the full treatment. Think of it as the creative direction of your social media, with me making the reels, rather than four separate edits. We can put together a bespoke package if you'd prefer.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <div class="name"><h3>Two a month</h3></div>
+        <div class="price">€1,100<small>/ month</small></div>
+        <ul><li>2 reels a month from your existing listing films</li><li>A storyboard for each one before I make it</li></ul>
+        <div class="for">A start, with the footage you already have.</div>
+      </div>
+      <div class="tier pick">
+        <div class="name"><h3>One a week</h3><span class="tag">Recommended</span></div>
+        <div class="price">€2,000<small>/ month</small></div>
+        <ul><li>4 reels a month, one every week</li><li>A few storyboard ideas each week, to choose from and shape together</li><li>From your films, or filmed with your agents</li><li>One round of changes; 5-day turnaround</li></ul>
+        <div class="for">A reel on the account every week, each one built for the buyer of that house.</div>
+      </div>
+      <div class="tier">
+        <div class="name"><h3>Two a week</h3></div>
+        <div class="price">€3,800<small>/ month</small></div>
+        <ul><li>8 reels a month, everything in One a week</li><li>Ideas for every new listing as it comes on</li><li>Edits of your longer listing films for YouTube</li><li>48-hour turnaround for a new listing</li></ul>
+        <div class="for">For every listing to have its reel the week it goes live.</div>
+      </div>
+    </div>
+    <p class="fine">Prices exclude VAT. Billed monthly; either of us can end it with a month's notice.</p>
+  </section>
+</div>
+
+<script>
+document.querySelectorAll('.screen').forEach(s=>{
+  const vids=[...s.querySelectorAll('video')]; let cur=0, muted=false, started=false;
+  const bM=s.querySelector('.mute'), bF=s.querySelector('.full'), bar=s.querySelector('.bar i');
+  const v=()=>vids[cur];
+  vids.forEach(x=>{ x.loop=false; x.addEventListener('ended',swap); x.addEventListener('timeupdate',()=>{ if(x===v()&&x.duration) bar.style.width=(x.currentTime/x.duration*100)+'%'; }); });
+  // the second player is parked at frame 0; on 'ended' it starts and the two swap, so the loop has no decode gap
+  function swap(){ const a=vids[cur], b=vids[1-cur]; b.currentTime=0; b.muted=muted; const p=b.play(); if(p&&p.catch) p.catch(()=>{}); b.classList.remove('back'); b.classList.add('front'); a.classList.remove('front'); a.classList.add('back'); a.pause(); a.currentTime=0; cur=1-cur; }
+  function setMute(m){ muted=m; vids.forEach(x=>x.muted=muted); s.classList.toggle('muted',muted); bM.setAttribute('aria-label',muted?'Unmute':'Mute'); }
+  function play(){
+    if(!started){ started=true; vids[1].preload='auto'; vids[1].load(); vids[1].currentTime=0; }
+    document.querySelectorAll('.screen').forEach(o=>{ if(o!==s) o.dispatchEvent(new Event('halt')); });
+    const x=v(); x.muted=muted; const p=x.play();
+    if(p&&p.catch) p.catch(()=>{ setMute(true); x.play().catch(()=>{}); });
+    s.classList.add('playing'); s.setAttribute('aria-label','Pause');
+  }
+  function pause(){ v().pause(); s.classList.remove('playing'); s.setAttribute('aria-label','Play'); }
+  const toggle=()=>{ s.classList.contains('playing')?pause():play(); };
+  s.addEventListener('halt',()=>{ if(s.classList.contains('playing')) pause(); });
+  s.addEventListener('click',e=>{ if(e.target.closest('button')) return; toggle(); });
+  s.addEventListener('keydown',e=>{ if(e.target!==s) return; if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle(); } });
+  bM.addEventListener('click',e=>{ e.stopPropagation(); setMute(!muted); });
+  function full(){ const x=v(); if(s.requestFullscreen){ s.requestFullscreen().catch(()=>{}); } else if(x.webkitEnterFullscreen){ x.webkitEnterFullscreen(); } }
+  bF.addEventListener('click',e=>{ e.stopPropagation(); full(); });
+});
+</script>
+
+</body>
 </html>
