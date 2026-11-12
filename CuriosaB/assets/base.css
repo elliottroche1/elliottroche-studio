@@ -1,0 +1,74 @@
+/* Shared by both directions: fonts, header, product row, draft note, tuning panel. */
+@font-face{font-family:"Instrument Serif";src:url(fonts/instrument-serif.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url(fonts/instrument-serif-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Instrument Sans";src:url(fonts/instrument-sans.woff2) format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Young Serif";src:url(fonts/young-serif.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Fraunces";src:url(fonts/fraunces.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(fonts/dm-sans.woff2) format("woff2");font-weight:100 1000;font-display:swap}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+:root{--pad:56px}
+@media (max-width:900px){:root{--pad:20px}}
+
+/* Header: one line */
+.top{height:80px;padding:0 var(--pad);display:flex;align-items:center;gap:40px;background:var(--ground);position:relative;z-index:5}
+.logo img{height:46px;width:auto;mix-blend-mode:multiply}
+.nav{display:flex;gap:30px;margin-left:auto;font-size:15px;font-weight:500;letter-spacing:.005em}
+.nav a{padding:8px 0;border-bottom:1px solid transparent;transition:border-color .2s}
+.nav a:hover{border-color:currentColor}
+.tools{display:flex;gap:18px;align-items:center;margin-left:14px}
+.tools a{display:grid;place-items:center;width:36px;height:36px;border-radius:50%}
+.tools a:hover{background:rgba(60,40,20,.07)}
+.tools svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.tools .menu-btn{display:none}
+@media (max-width:1080px){.nav{gap:22px;font-size:14px}}
+@media (max-width:900px){
+  .top{height:64px;gap:8px}
+  .logo img{height:36px}
+  .nav{display:none}
+  .tools{margin-left:auto;gap:4px}
+  .tools .menu-btn{display:grid}
+}
+
+/* Product row */
+.row{padding:88px var(--pad) 96px}
+.row-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px}
+.row-head h2{margin:0;font-family:var(--display);font-weight:var(--display-w,400);font-size:clamp(30px,3.2vw,44px);line-height:1.05;letter-spacing:-.01em}
+.row-head a{font-size:15px;font-weight:500;border-bottom:1px solid currentColor;padding-bottom:2px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card .pic{background:var(--tile);aspect-ratio:1/1;border-radius:var(--radius,4px);overflow:hidden}
+.card .pic img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply;transform:scale(.9);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.card:hover .pic img{transform:scale(.96)}
+.card h3{margin:14px 0 2px;font-size:15px;font-weight:500}
+.card p{margin:0;font-size:15px;color:var(--muted)}
+@media (max-width:900px){
+  .row{padding:56px var(--pad) 64px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px 12px}
+  .card h3{font-size:14px;margin-top:10px}
+  .card p{font-size:14px}
+}
+
+/* Draft note */
+.draft{padding:22px var(--pad);font-size:13px;color:var(--muted);border-top:1px solid rgba(60,40,20,.12);display:flex;gap:10px 24px;flex-wrap:wrap;justify-content:space-between}
+
+/* Tuning panel (for Elliott; add ?clean to the address to hide it) */
+.tune-btn{position:fixed;right:16px;bottom:16px;z-index:50;font:500 13px/1 var(--sans);padding:11px 16px;border-radius:999px;border:0;background:#1f1b18;color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.tune{position:fixed;right:16px;bottom:64px;z-index:50;width:290px;max-width:calc(100vw - 32px);background:#fff;color:#1f1b18;border-radius:14px;padding:16px 18px 14px;box-shadow:0 14px 50px rgba(0,0,0,.25);font:13px/1.4 var(--sans);display:none}
+.tune.open{display:block}
+.tune h4{margin:0 0 10px;font-size:13px;font-weight:600}
+.tune label{display:block;margin:10px 0 0;font-weight:500}
+.tune label span{float:right;color:#8a8079;font-weight:400}
+.tune input[type=range]{width:100%;margin:6px 0 0;accent-color:#1f1b18}
+.tune .sw{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.tune .sw button{width:30px;height:30px;border-radius:50%;border:2px solid #fff;outline:1px solid #cfc7bf;cursor:pointer;padding:0}
+.tune .sw button.on{outline:2px solid #1f1b18}
+.tune .seg{display:flex;gap:6px;margin-top:8px}
+.tune .seg button{flex:1;padding:7px 4px;border-radius:8px;border:1px solid #cfc7bf;background:#fff;font:inherit;cursor:pointer}
+.tune .seg button.on{background:#1f1b18;color:#fff;border-color:#1f1b18}
+.tune textarea{width:100%;margin-top:12px;height:54px;font:11px/1.35 ui-monospace,Menlo,monospace;border:1px solid #cfc7bf;border-radius:8px;padding:6px;resize:none;color:#5b524b}
+.tune small{display:block;margin-top:6px;color:#8a8079}
+.clean .tune,.clean .tune-btn{display:none!important}

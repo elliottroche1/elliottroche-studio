@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Curiosa Living: design draft A</title>
+<link rel="stylesheet" href="/CuriosaA/assets/base.css">
+<style>
+:root{
+  --warm:55%;
+  --ground:color-mix(in srgb,#EFE2CC var(--warm),#FBFAF8);
+  --tile:color-mix(in srgb,var(--ground),#6f5330 9%);
+  --ink:#2A2521; --muted:#7B7067; --btn:#2A2521;
+  --sans:"Instrument Sans",system-ui,sans-serif;
+  --display:"Instrument Serif",Georgia,serif;
+  --h1:1; --pic:1;
+}
+.hero{min-height:calc(100svh - 80px);padding:0 var(--pad);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-rows:1fr auto;column-gap:24px}
+.words{align-self:center;padding:24px 0 56px;max-width:560px}
+.place{font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--muted);margin:0 0 22px}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:calc(clamp(46px,6.1vw,92px) * var(--h1) * var(--fit,1));line-height:.98;letter-spacing:-.015em}
+h1 em{font-style:italic}
+.say{margin:26px 0 34px;font-size:19px;line-height:1.5;max-width:30em;color:#4a423c}
+.go{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;height:54px;padding:0 30px;border-radius:999px;background:var(--btn);color:#fff;font-size:16px;font-weight:500;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.visit{margin-left:10px;font-size:16px;font-weight:500;border-bottom:1px solid currentColor;padding-bottom:2px}
+
+/* The still life: four real products, cut out and stood together */
+.set{position:relative;align-self:end;justify-self:end;width:min(100%,calc(820px * var(--pic)));aspect-ratio:10/8.6;margin-right:calc(var(--pad) * -1 + 8px)}
+.arch{position:absolute;left:19%;right:15%;top:2%;bottom:17%;background:var(--tile);border-radius:999px 999px 0 0}
+.set a{position:absolute;display:block}
+.set img{width:100%;height:auto;position:relative}
+.set a::before{content:"";position:absolute;left:4%;right:4%;bottom:-3%;height:16%;background:radial-gradient(closest-side,rgba(60,40,20,.28),rgba(60,40,20,0));filter:blur(4px)}
+.palm{right:-1%;bottom:21%;width:38%}
+.lamp{left:9%;bottom:21%;width:11.5%}
+.sofa{left:6%;bottom:12%;width:82%}
+.table{left:16%;bottom:1.5%;width:31%}
+.palm::before{left:30%!important;right:30%!important;height:5%!important}
+.lamp::before{left:-20%!important;right:-20%!important;height:5%!important}
+.tag{position:absolute;right:9%;bottom:3%;font-size:14px;line-height:1.35;text-align:right;color:#4a423c}
+.tag b{display:block;font-weight:500;color:var(--ink)}
+
+.cats{grid-column:1/-1;display:flex;gap:34px;align-items:center;border-top:1px solid rgba(60,40,20,.16);padding:20px 0 22px;font-size:15px;font-weight:500;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cats span{color:var(--muted);font-weight:400}
+.cats a:hover{text-decoration:underline;text-underline-offset:4px}
+
+@media (max-width:900px){
+  .hero{display:block;min-height:0;padding-top:20px}
+  .words{padding:8px 0 0}
+  .place{font-size:13px;margin-bottom:14px}
+  h1{font-size:calc(clamp(44px,13vw,58px) * var(--h1) * var(--fit,1))}
+  .say{font-size:17px;margin:16px 0 22px}
+  .btn{height:50px;padding:0 24px;font-size:15px}
+  .visit{display:none}
+  .set{width:calc(100% + var(--pad));margin:26px calc(var(--pad) * -1) 0 0;aspect-ratio:10/8}
+  .tag{font-size:12px;right:7%}
+  .cats{margin:0 calc(var(--pad) * -1);padding:16px var(--pad);gap:24px;font-size:14px}
+}
+
+/* Copy panel (added for the copy options). ?clean hides it, ?copy=8 opens on option 8,
+   ?copy=F1&t=2&still shows the third title of a fading set without cycling, &hold=4&fade=1.2 sets the timing,
+   &wait holds the fading until the page is sent the message 'curiosa-go'. */
+.copy-btn{position:fixed;right:88px;bottom:16px;z-index:50;font:500 13px/1 var(--sans);padding:11px 16px;border-radius:999px;border:0;background:#1f1b18;color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.copy-btn b{font-weight:500;opacity:.65;margin-left:6px}
+.copy-panel{position:fixed;right:16px;bottom:64px;z-index:51;width:340px;max-width:calc(100vw - 32px);max-height:min(72vh,660px);overflow:auto;background:#fff;color:#1f1b18;border-radius:14px;padding:14px 12px 12px;box-shadow:0 14px 50px rgba(0,0,0,.25);font:13px/1.35 var(--sans);display:none}
+.copy-panel.open{display:block}
+.copy-panel h5{margin:12px 6px 4px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#8a8079}
+.copy-panel h5:first-child{margin-top:2px}
+.copy-panel button.opt{display:flex;gap:10px;width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:0;border-radius:8px;padding:7px 6px;cursor:pointer}
+.copy-panel button.opt:hover{background:#f3efe9}
+.copy-panel button.opt.on{background:#1f1b18;color:#fff}
+.copy-panel button.opt i{flex:none;width:26px;font-style:normal;font-weight:600;opacity:.6}
+.copy-panel .sl{margin:2px 6px 6px 42px}
+.copy-panel .sl label{display:block;margin:8px 0 0;font-weight:500}
+.copy-panel .sl label span{float:right;color:#8a8079;font-weight:400}
+.copy-panel .sl input{width:100%;margin:6px 0 0;accent-color:#1f1b18}
+.copy-panel small{display:block;margin:10px 6px 0;color:#8a8079}
+.clean .copy-btn,.clean .copy-panel{display:none!important}
+.words h1 .nb{white-space:nowrap}
+/* a link in the line under the title: the same thin underline as the page's other text links */
+.words .say a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;white-space:nowrap}
+.words .say a:hover{text-decoration-thickness:2px}
+.words h1 .ap{margin:0 -.05em 0 -.035em}
+/* Fading titles: every title sits in the same grid cell, so the tallest one reserves the space and nothing below moves. */
+.words h1 .stack{display:grid}
+.words h1 .stem + .stack{display:inline-grid;vertical-align:bottom}
+.words h1 .stem + .stack .t{white-space:nowrap}
+.words h1 .t{grid-area:1/1;align-self:end;opacity:0;will-change:opacity;transition:opacity calc(var(--fade,.9s) * .5) ease}
+.words h1 .t.on{opacity:1;transition:opacity calc(var(--fade,.9s) * .6) ease calc(var(--fade,.9s) * .4)}
+.words h1.snap .t{transition:none!important}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="#"><img src="/CuriosaA/assets/img/logo.png" alt="Curiosa Living"></a>
+  <nav class="nav">
+    <a href="#">Indoor</a><a href="#">Outdoor</a><a href="#">Big Green Egg</a><a href="#">Beds</a><a href="#">Made to measure</a><a href="#">The showroom</a>
+  </nav>
+  <div class="tools">
+    <a href="#" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></a>
+    <a href="#" aria-label="Basket"><svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg></a>
+    <a href="#" class="menu-btn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></svg></a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="words">
+    <p class="place">Almancil, Algarve</p>
+    <h1>Everything <span class="nb">for the</span> living room.</h1>
+    <p class="say">See it in our <a href="#">4,000 m² showroom</a>, or order online.</p>
+    <div class="go">
+      <a class="btn" href="#">Shop indoor</a>
+      <a class="btn line" href="#">Shop outdoor</a>
+      <a class="visit" href="#">Plan a visit</a>
+    </div>
+  </div>
+
+  <div class="set">
+    <div class="arch"></div>
+    <a class="palm" href="#" title="Areca palm, 230 cm"><img src="/CuriosaA/assets/img/c34801.webp" alt="Areca palm"></a>
+    <a class="lamp" href="#" title="Coccon floor lamp"><img src="/CuriosaA/assets/img/c38554.webp" alt="Coccon floor lamp"></a>
+    <a class="sofa" href="#" title="Ovie modular sofa"><img src="/CuriosaA/assets/img/c34671.webp" alt="Ovie modular sofa"></a>
+    <a class="table" href="#" title="Kira coffee table"><img src="/CuriosaA/assets/img/c37394.webp" alt="Kira coffee table"></a>
+    <p class="tag"><b>Ovie modular sofa</b>from €605</p>
+  </div>
+
+  <nav class="cats">
+    <span>Start with</span>
+    <a href="#">Sofas</a><a href="#">Lounge chairs</a><a href="#">Dining tables</a><a href="#">Beds</a><a href="#">Garden lounge sets</a><a href="#">Sunbeds and daybeds</a><a href="#">Parasols</a><a href="#">Big Green Egg</a>
+  </nav>
+</section>
+
+<section class="row">
+  <div class="row-head"><h2>Recently added</h2><a href="#">See all</a></div>
+  <div class="grid">
+    <a class="card" href="#"><div class="pic"><img src="/CuriosaA/assets/img/t38187.jpg" alt=""></div><h3>Francis lounge armchair</h3><p>€949</p></a>
+    <a class="card" href="#"><div class="pic"><img src="/CuriosaA/assets/img/t37394.jpg" alt=""></div><h3>Kira coffee table</h3><p>€779</p></a>
+    <a class="card" href="#"><div class="pic"><img src="/CuriosaA/assets/img/t38561.jpg" alt=""></div><h3>Coccon floor lamp</h3><p>€439</p></a>
+    <a class="card" href="#"><div class="pic"><img src="/CuriosaA/assets/img/t34596.jpg" alt=""></div><h3>Yavi daybed</h3><p>€2,599</p></a>
+  </div>
+</section>
+</main>
+
+<footer class="draft"><span>Design draft for Curiosa Living. Direction A, first screen only.</span><span>Elliott Roche, November 2026. Not a working shop.</span></footer>
+
+<button class="tune-btn" id="tb">Tune</button>
+<div class="tune" id="tp">
+  <h4>Tune by eye</h4>
+  <label>Headline size <span id="v1"></span><input type="range" id="h1" min="0.75" max="1.25" step="0.01" value="1"></label>
+  <label>Background warmth <span id="v2"></span><input type="range" id="warm" min="0" max="100" step="1" value="55"></label>
+  <label>Picture size <span id="v3"></span><input type="range" id="pic" min="0.7" max="1.2" step="0.01" value="1"></label>
+  <label>Button colour</label>
+  <div class="sw" id="sw">
+    <button data-c="#2A2521" style="background:#2A2521" title="Ink"></button>
+    <button data-c="#5F6B4C" style="background:#5F6B4C" title="Olive"></button>
+    <button data-c="#B4573A" style="background:#B4573A" title="Terracotta"></button>
+    <button data-c="#A87E12" style="background:#A87E12" title="Curiosa gold"></button>
+  </div>
+  <textarea id="out" readonly></textarea>
+  <small>Copy this line to Claude to lock the settings in.</small>
+</div>
+<script>
+(function(){
+  document.documentElement.classList.add('clean');
+  var r=document.documentElement.style, $=function(i){return document.getElementById(i)};
+  var s={h1:1,warm:55,pic:1,btn:'#2A2521'};
+  function apply(){
+    r.setProperty('--h1',s.h1); r.setProperty('--warm',s.warm+'%'); r.setProperty('--pic',s.pic); r.setProperty('--btn',s.btn);
+    $('v1').textContent=Math.round(s.h1*100)+'%'; $('v2').textContent=s.warm; $('v3').textContent=Math.round(s.pic*100)+'%';
+    [].forEach.call($('sw').children,function(b){b.classList.toggle('on',b.dataset.c===s.btn)});
+    $('out').value='A: headline '+s.h1+', warmth '+s.warm+', picture '+s.pic+', button '+s.btn+(window.copyPick?', copy '+window.copyPick:'');
+  }
+  ['h1','warm','pic'].forEach(function(k){$(k).addEventListener('input',function(e){s[k]=+e.target.value;apply()})});
+  $('sw').addEventListener('click',function(e){if(e.target.dataset.c){s.btn=e.target.dataset.c;apply()}});
+  $('tb').addEventListener('click',function(){$('tp').classList.toggle('open')});
+  apply();
+})();
+</script>
+<button class="copy-btn" id="cbtn">Copy</button>
+<div class="copy-panel" id="cpanel"></div>
+
+<script>
+/* Copy panel. The words for this direction are in COPY. Left and right arrows step through the options;
+   0 is the copy as drafted and 1 to 9 pick those options. */
+(function(){
+  var COPY=[
+ {
+  "id": "F2",
+  "group": "Titles that fade",
+  "stem": "Everything <span class=\"nb\">for the</span>",
+  "fade": [
+   "living room.",
+   "dining room.",
+   "bedroom.",
+   "terrace.",
+   "garden."
+  ],
+  "say": "See it in our <a href=\"#\">4,000 m² showroom</a>, or order online."
+ }
+];
+  var OPEN_ON='F2';
+  var r=document.documentElement.style, $=function(i){return document.getElementById(i)};
+  var h=document.querySelector('.words h1'), say=document.querySelector('.words .say');
+  var btn=$('cbtn'), panel=$('cpanel'), tune=$('tp'), tuneBtn=$('tb');
+  var qs=location.search, m=/[?&]copy=([A-Za-z0-9]+)/.exec(qs), still=/[?&]still/.test(qs), t0=+((/[?&]t=(\d+)/.exec(qs)||[])[1]||0);
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var wait=/[?&]wait/.test(qs);                            // the side-by-side page starts all its copies together
+  var hold=+((/[?&]hold=([0-9.]+)/.exec(qs)||[])[1]||3.2), fade=+((/[?&]fade=([0-9.]+)/.exec(qs)||[])[1]||0.9), k=0, T=[], ti=0, timer=null;
+  function find(id){for(var i=0;i<COPY.length;i++) if(COPY[i].id.toLowerCase()===String(id).toLowerCase()) return i; return -1}
+  function plain(s){return s.replace(/<[^>]+>/g,'')}
+  function label(c){return c.label ? c.label : c.fade ? (c.stem?c.stem+' ':'')+c.fade.map(plain).join(' \u2192 ') : plain(c.h1)}
+
+  // The list, with the timing sliders straight under the titles that fade
+  var sliders='<div class="sl"><label>Each title stays <span id="vh"></span><input type="range" id="hold" min="1.5" max="7" step="0.1" value="'+hold+'"></label>'+
+        '<label>Fade takes <span id="vf"></span><input type="range" id="fade" min="0.2" max="2.4" step="0.1" value="'+fade+'"></label></div>';
+  var html='', g='';
+  COPY.forEach(function(c,i){
+    if(c.group!==g){g=c.group; html+='<h5>'+g+'</h5>'}
+    html+='<button class="opt" data-k="'+i+'"><i>'+c.id+'</i><span>'+label(c)+'</span></button>';
+    if(c.fade&&!(COPY[i+1]&&COPY[i+1].fade)){html+=sliders; sliders=''}
+  });
+  html+=sliders+'<small>Left and right arrows step through the list.</small>';
+  panel.innerHTML=html;
+
+  // Keep the headline inside the page: shrink it only when a word or the line would run off the edge.
+  // With fading titles the widest one decides, so the size does not change from title to title.
+  function fit(){
+    r.setProperty('--fit',1);
+    if(h.scrollWidth>h.clientWidth+1) r.setProperty('--fit',(h.clientWidth/h.scrollWidth*0.995).toFixed(3));
+  }
+  function setTitle(i){ti=i; T.forEach(function(t,j){t.classList.toggle('on',j===i)})}
+  function cycle(){
+    clearInterval(timer); timer=null;
+    if(T.length<2||still||reduce||wait) return;           // reduced motion: the first title stays
+    timer=setInterval(function(){setTitle((ti+1)%T.length)},(hold+fade)*1000);
+  }
+  function note(){
+    var c=COPY[k];
+    window.copyPick=c.id+(c.fade?', each title '+hold+' s, fade '+fade+' s':'');
+    var s=$('h1'); if(s) s.dispatchEvent(new Event('input'));       // refreshes the settings line in Tune
+    r.setProperty('--fade',fade+'s'); $('vh').textContent=hold+' s'; $('vf').textContent=fade+' s';
+  }
+  function show(i,start){
+    k=i; var c=COPY[k];
+    h.classList.add('snap');
+    if(c.fade){
+      h.innerHTML=(c.stem?'<span class="stem">'+c.stem+'</span> ':'')+'<span class="stack">'+
+        c.fade.map(function(t,j){return '<span class="t"'+(j?' aria-hidden="true"':'')+'>'+t+'</span>'}).join('')+'</span>';
+    } else h.innerHTML=c.h1;
+    T=[].slice.call(h.querySelectorAll('.t'));
+    if(T.length) setTitle(Math.min(start||0,T.length-1));
+    say.innerHTML=c.say;
+    [].forEach.call(panel.querySelectorAll('.opt'),function(b){b.classList.toggle('on',+b.dataset.k===k)});
+    btn.innerHTML='Copy<b>'+c.id+'</b>';
+    note(); fit(); cycle();
+    requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.remove('snap')})});
+  }
+
+  panel.addEventListener('click',function(e){var b=e.target.closest('.opt'); if(b) show(+b.dataset.k)});
+  $('hold').addEventListener('input',function(e){hold=+e.target.value; note(); cycle()});
+  $('fade').addEventListener('input',function(e){fade=+e.target.value; note(); cycle()});
+  btn.addEventListener('click',function(){panel.classList.toggle('open'); if(tune) tune.classList.remove('open')});
+  if(tuneBtn) tuneBtn.addEventListener('click',function(){panel.classList.remove('open')});
+  document.addEventListener('keydown',function(e){
+    return;                                                 // the drafts have one set of words each
+    if(e.key==='ArrowRight') show((k+1)%COPY.length);
+    else if(e.key==='ArrowLeft') show((k+COPY.length-1)%COPY.length);
+    else if(/^[0-9]$/.test(e.key)){var i=find(e.key==='0'?'Now':e.key); if(i>=0) show(i)}
+  });
+  window.addEventListener('resize',fit);
+  if(tune){tune.addEventListener('input',function(){requestAnimationFrame(fit)}); tune.addEventListener('click',function(){requestAnimationFrame(fit)});}
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener('load',fit);
+  window.addEventListener('message',function(e){if(e.data==='curiosa-go'&&wait){wait=false; cycle()}});
+  var first=find(m?m[1]:OPEN_ON); show(first<0?0:first,t0);
+})();
+</script>
+</body>
+</html>
