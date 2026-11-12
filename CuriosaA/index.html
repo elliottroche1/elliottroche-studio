@@ -7,23 +7,25 @@
 <title>Curiosa Living: design draft A</title>
 <link rel="stylesheet" href="/CuriosaA/assets/base.css">
 <style>
+@font-face{font-family:"Source Serif 4";src:url(/CuriosaA/assets/fonts/source-serif-4.woff2) format("woff2");font-weight:200 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url(/CuriosaA/assets/fonts/source-serif-4-italic.woff2) format("woff2");font-weight:200 900;font-style:italic;font-display:swap}
 :root{
   --warm:55%;
-  --ground:color-mix(in srgb,#EFE2CC var(--warm),#FBFAF8);
+  --ground:color-mix(in srgb,#E6E2DA var(--warm),#FBFAF8);
   --tile:color-mix(in srgb,var(--ground),#6f5330 9%);
   --ink:#2A2521; --muted:#7B7067; --btn:#2A2521;
   --sans:"Instrument Sans",system-ui,sans-serif;
-  --display:"Instrument Serif",Georgia,serif;
+  --display:"Source Serif 4",Georgia,serif; --display-w:300;
   --h1:1; --pic:1;
 }
 .hero{min-height:calc(100svh - 80px);padding:0 var(--pad);display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-rows:1fr auto;column-gap:24px}
 .words{align-self:center;padding:24px 0 56px;max-width:560px}
 .place{font-size:14px;font-weight:500;letter-spacing:.04em;color:var(--muted);margin:0 0 22px}
-h1{margin:0;font-family:var(--display);font-weight:400;font-size:calc(clamp(46px,6.1vw,92px) * var(--h1) * var(--fit,1));line-height:.98;letter-spacing:-.015em}
+h1{margin:0;font-family:var(--display);font-weight:300;font-size:calc(clamp(39px,5.2vw,78px) * var(--h1) * var(--fit,1));line-height:1;letter-spacing:-.022em}
 h1 em{font-style:italic}
 .say{margin:26px 0 34px;font-size:19px;line-height:1.5;max-width:30em;color:#4a423c}
 .go{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.btn{display:inline-flex;align-items:center;height:54px;padding:0 30px;border-radius:999px;background:var(--btn);color:#fff;font-size:16px;font-weight:500;transition:transform .2s}
+.btn{display:inline-flex;align-items:center;height:54px;padding:0 30px;border-radius:8px;background:var(--btn);color:#fff;font-size:16px;font-weight:500;transition:transform .2s}
 .btn:hover{transform:translateY(-2px)}
 .btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .visit{margin-left:10px;font-size:16px;font-weight:500;border-bottom:1px solid currentColor;padding-bottom:2px}
@@ -33,13 +35,11 @@ h1 em{font-style:italic}
 .arch{position:absolute;left:19%;right:15%;top:2%;bottom:17%;background:var(--tile);border-radius:999px 999px 0 0}
 .set a{position:absolute;display:block}
 .set img{width:100%;height:auto;position:relative}
-.set a::before{content:"";position:absolute;left:4%;right:4%;bottom:-3%;height:16%;background:radial-gradient(closest-side,rgba(60,40,20,.28),rgba(60,40,20,0));filter:blur(4px)}
+.set a .sh{position:absolute;background-size:100% 100%;background-repeat:no-repeat;pointer-events:none;opacity:.72}
 .palm{right:-1%;bottom:21%;width:38%}
 .lamp{left:9%;bottom:21%;width:11.5%}
 .sofa{left:6%;bottom:12%;width:82%}
 .table{left:16%;bottom:1.5%;width:31%}
-.palm::before{left:30%!important;right:30%!important;height:5%!important}
-.lamp::before{left:-20%!important;right:-20%!important;height:5%!important}
 .tag{position:absolute;right:9%;bottom:3%;font-size:14px;line-height:1.35;text-align:right;color:#4a423c}
 .tag b{display:block;font-weight:500;color:var(--ink)}
 
@@ -52,7 +52,7 @@ h1 em{font-style:italic}
   .hero{display:block;min-height:0;padding-top:20px}
   .words{padding:8px 0 0}
   .place{font-size:13px;margin-bottom:14px}
-  h1{font-size:calc(clamp(44px,13vw,58px) * var(--h1) * var(--fit,1))}
+  h1{font-size:calc(clamp(36px,10.5vw,47px) * var(--h1) * var(--fit,1))}
   .say{font-size:17px;margin:16px 0 22px}
   .btn{height:50px;padding:0 24px;font-size:15px}
   .visit{display:none}
@@ -125,8 +125,8 @@ h1 em{font-style:italic}
     <div class="arch"></div>
     <a class="palm" href="#" title="Areca palm, 230 cm"><img src="/CuriosaA/assets/img/c34801.webp" alt="Areca palm"></a>
     <a class="lamp" href="#" title="Coccon floor lamp"><img src="/CuriosaA/assets/img/c38554.webp" alt="Coccon floor lamp"></a>
-    <a class="sofa" href="#" title="Ovie modular sofa"><img src="/CuriosaA/assets/img/c34671.webp" alt="Ovie modular sofa"></a>
-    <a class="table" href="#" title="Kira coffee table"><img src="/CuriosaA/assets/img/c37394.webp" alt="Kira coffee table"></a>
+    <a class="sofa" href="#" title="Ovie modular sofa"><i class="sh" style="left:-2.333%;top:64.951%;width:104.917%;height:42.892%;background-image:url(/CuriosaA/assets/img/s34671.webp)"></i><img src="/CuriosaA/assets/img/c34671.webp" alt="Ovie modular sofa"></a>
+    <a class="table" href="#" title="Kira coffee table"><i class="sh" style="left:-5.2%;top:53.846%;width:108%;height:53.394%;background-image:url(/CuriosaA/assets/img/s37394.webp)"></i><img src="/CuriosaA/assets/img/c37394.webp" alt="Kira coffee table"></a>
     <p class="tag"><b>Ovie modular sofa</b>from €605</p>
   </div>
 

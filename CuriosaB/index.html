@@ -19,7 +19,7 @@
   background:linear-gradient(var(--wall) 0,var(--wall) var(--split),color-mix(in srgb,var(--floor),#5a3a1c 14%) var(--split),var(--floor) calc(var(--split) + 5%),var(--floor) 100%)}
 .words{position:relative;z-index:3;padding:52px var(--pad) 0;color:var(--on-wall);pointer-events:none}
 .words a{pointer-events:auto}
-h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:calc(clamp(44px,7.4vw,112px) * var(--h1) * var(--fit,1));line-height:.98;letter-spacing:var(--track);font-variation-settings:var(--fvs,normal);white-space:nowrap}
+h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:calc(clamp(44px,7.4vw,112px) * var(--h1) * var(--fit,1));line-height:var(--lh,.98);letter-spacing:var(--track);font-variation-settings:var(--fvs,normal);white-space:nowrap}
 .under{display:flex;align-items:center;gap:36px;margin-top:26px;flex-wrap:wrap}
 .say{margin:0;font-size:19px;line-height:1.45;max-width:25em}
 .go{display:flex;gap:10px}
@@ -30,7 +30,7 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
 /* The line-up: real products standing on the floor, drifting past */
 .lineup{position:absolute;inset:0;z-index:2}
 .track{position:absolute;left:0;bottom:calc(100% - var(--split) - 104px);display:flex;align-items:flex-end;gap:calc(84px * var(--s));padding-left:calc(84px * var(--s));will-change:transform;animation:drift var(--dur,200s) linear infinite}
-.lineup:hover .track{animation-play-state:paused}
+.track:has(.piece:hover){animation-play-state:paused}
 @keyframes drift{to{transform:translateX(-50%)}}
 .piece{position:relative;flex:none;width:calc(var(--w) * 1px * var(--s));display:block}
 .piece img{width:100%;height:auto;position:relative;transition:transform .35s cubic-bezier(.2,.7,.2,1);transform-origin:50% 100%}
@@ -56,6 +56,7 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
 
 
 /* Looks (added 12 Nov 2026). Each lever is a number from Tune; at 0 the page is B as drawn. */
+@font-face{font-family:"Besley";src:url(/CuriosaB/assets/fonts/besley.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
 .fx{position:absolute;left:0;right:0;pointer-events:none}
 .fx-wall{top:0;height:var(--split);background:
   radial-gradient(80% 130% at 88% -18%,rgba(255,240,214,calc(.15 * var(--light))),rgba(255,240,214,0) 66%),      /* light from the top right, where the wall is empty: the words stay on the darker side */
@@ -134,7 +135,7 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
 <main>
 <section class="hero">
   <div class="words">
-    <h1><span class="nb">4,000 m²</span> showroom.</h1>
+    <h1><span class="nb">Over 20 years</span> in Portugal.</h1>
     <div class="under">
       <p class="say">Indoor and outdoor furniture in our <a href="#">4,000 m² showroom</a>, and online.</p>
       <div class="go"><a class="btn" href="#">Shop indoor</a><a class="btn line" href="#">Shop outdoor</a></div>
@@ -188,7 +189,7 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
   <label>Shadow strength <span id="v_shs"></span><input type="range" id="shs" min="0" max="1.6" step="0.05"></label>
   <label>Shadow thrown on the wall <span id="v_cast"></span><input type="range" id="cast" min="0" max="1.6" step="0.05"></label>
   <label>Headline typeface</label>
-  <div class="seg" id="seg"><button data-f="young">Young Serif</button><button data-f="fraunces">Fraunces</button><button data-f="instrument">Instrument</button></div>
+  <div class="seg" id="seg" style="flex-wrap:wrap"><button data-f="young">Young Serif</button><button data-f="fraunces">Fraunces</button><button data-f="instrument">Instrument</button><button data-f="besley">Besley</button></div>
   <label id="wghtrow">Headline weight <span id="v_wght"></span><input type="range" id="wght" min="250" max="700" step="10"></label>
   <label>Headline size <span id="v_h1"></span><input type="range" id="h1" min="0.7" max="1.4" step="0.01"></label>
   <label>Small text</label>
@@ -228,13 +229,14 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
   t.innerHTML=html;
 
   // Looks: the same page dressed several ways. Each value is also a slider, a swatch or a button in Tune.
-  var LOOKS=[{"name": "As it is", "note": "B as drawn", "wall": "#B85C3E", "floor": "#E7D7BF", "light": 0, "grain": 0, "depth": 0, "shm": "soft", "shs": 1, "cast": 0, "font": "young", "wght": 400, "h1": 1, "btnr": 27, "sans": "dm"}, {"name": "1", "note": "the same terracotta, as a real wall", "wall": "#9C543D", "floor": "#DDD1BF", "light": 1, "grain": 0.9, "depth": 0.8, "shm": "hug", "shs": 1, "cast": 0, "font": "instrument", "wght": 400, "h1": 1.14, "btnr": 8, "sans": "instrument"}, {"name": "2", "note": "pale limewash", "wall": "#D9C4B0", "floor": "#E8E1D5", "light": 0.7, "grain": 1, "depth": 0.8, "shm": "hug", "shs": 1, "cast": 0, "font": "instrument", "wght": 400, "h1": 1.14, "btnr": 8, "sans": "instrument"}, {"name": "3", "note": "A’s cream page with B’s line-up", "wall": "#F7F0E4", "floor": "#EFE6D6", "light": 0.4, "grain": 0.25, "depth": 0.6, "shm": "hug", "shs": 1, "cast": 0, "font": "instrument", "wght": 400, "h1": 1.14, "btnr": 27, "sans": "instrument"}];
+  var LOOKS=[{"name": "As it is", "note": "B as drawn", "wall": "#B85C3E", "floor": "#E7D7BF", "light": 0, "grain": 0, "depth": 0, "shm": "soft", "shs": 1, "cast": 0, "font": "young", "wght": 400, "h1": 1, "btnr": 27, "sans": "dm"}, {"name": "1", "note": "the same terracotta, as a real wall", "wall": "#9C543D", "floor": "#DDD1BF", "light": 1, "grain": 0.9, "depth": 0.8, "shm": "hug", "shs": 1, "cast": 0, "font": "instrument", "wght": 400, "h1": 1.14, "btnr": 8, "sans": "instrument"}, {"name": "2", "note": "pale limewash", "wall": "#D9C4B0", "floor": "#E8E1D5", "light": 0.7, "grain": 1, "depth": 0.8, "shm": "hug", "shs": 1, "cast": 0, "font": "besley", "wght": 400, "h1": 0.77, "btnr": 8, "sans": "instrument"}, {"name": "3", "note": "A’s cream page with B’s line-up", "wall": "#F7F0E4", "floor": "#EFE6D6", "light": 0.4, "grain": 0.25, "depth": 0.6, "shm": "hug", "shs": 1, "cast": 0, "font": "instrument", "wght": 400, "h1": 1.14, "btnr": 27, "sans": "instrument"}];
   var q=/[?&]look=(\d)/.exec(location.search), look=q?Math.min(+q[1],LOOKS.length-1):2;
   var s={size:1,speed:26};
   var phone=window.matchMedia('(max-width:900px)');
-  var FONTS={young:['"Young Serif",Georgia,serif','normal','-.02em'],
-             fraunces:['"Fraunces",Georgia,serif','"SOFT" 0,"WONK" 0','-.025em'],        // its soft and wonky forms switched off
-             instrument:['"Instrument Serif",Georgia,serif','normal','-.012em']};
+  var FONTS={young:['"Young Serif",Georgia,serif','normal','-.02em','.98'],        // face, its variation settings, letter spacing, line height
+             fraunces:['"Fraunces",Georgia,serif','"SOFT" 0,"WONK" 0','-.025em','.98'],        // its soft and wonky forms switched off
+             instrument:['"Instrument Serif",Georgia,serif','normal','-.012em','.98'],
+             besley:['"Besley",Georgia,serif','normal','-.025em','1.02']};                     // a Clarendon
   var SANS={dm:'"DM Sans",system-ui,sans-serif',instrument:'"Instrument Sans",system-ui,sans-serif'};
   var RANGES=['light','grain','depth','shs','cast','wght','h1','btnr','size','speed'];
   function lum(h){var n=parseInt(h.slice(1),16),a=[n>>16&255,n>>8&255,n&255].map(function(v){v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*a[0]+.7152*a[1]+.0722*a[2]}
@@ -255,7 +257,7 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
     document.documentElement.classList.toggle('real',s.shm==='real');
     document.documentElement.classList.toggle('hug',s.shm==='hug');
     document.documentElement.classList.toggle('cast',s.cast>0);
-    var f=FONTS[s.font]; r.setProperty('--display',f[0]); r.setProperty('--fvs',f[1]); r.setProperty('--track',f[2]);
+    var f=FONTS[s.font]; r.setProperty('--display',f[0]); r.setProperty('--fvs',f[1]); r.setProperty('--track',f[2]); r.setProperty('--lh',f[3]);
     r.setProperty('--display-w',s.font==='fraunces'?s.wght:400);
     r.setProperty('--sans',SANS[s.sans]); r.setProperty('--label-w',s.sans==='dm'?600:500);
     $('wghtrow').style.display=s.font==='fraunces'?'':'none';
@@ -312,10 +314,9 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
   "id": "F1",
   "group": "Titles that fade",
   "fade": [
-   "<span class=\"nb\">4,000 m²</span> showroom.",
-   "3D presentations.",
+   "<span class=\"nb\">Over 20 years</span> in Portugal.",
    "Our own workshop.",
-   "<span class=\"nb\">Over 20 years</span> in Portugal."
+   "<span class=\"nb\">3D presentations.</span>"
   ],
   "say": "Indoor and outdoor furniture in our <a href=\"#\">4,000 m² showroom</a>, and online."
  }
@@ -398,4 +399,4 @@ h1{margin:0;font-family:var(--display);font-weight:var(--display-w);font-size:ca
 })();
 </script>
 </body>
-</html> 
+</html>
